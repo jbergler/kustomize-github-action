@@ -37,7 +37,11 @@ function parse_inputs {
 
     enable_alpha_plugins=""
     if [ "${INPUT_ENABLE_ALPHA_PLUGINS}" == "1" ] || [ "${INPUT_ENABLE_ALPHA_PLUGINS}" == "true" ]; then
-       enable_alpha_plugins="--enable_alpha_plugins"
+      if lastversion "${kustomize_version}" --newer-than "4.0.0"; then
+        enable_alpha_plugins="--enable-alpha-plugins"
+      else
+        enable_alpha_plugins="--enable_alpha_plugins"
+      fi
     fi
 
     with_token=()
