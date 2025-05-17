@@ -34,6 +34,10 @@ inputs:
     description: 'Enable Kustomize plugins'
     required: false
     default: '0'
+  helm_version:
+    description: 'Specify the version of helm to use (also passes --enable-helm)'
+    required: false
+    default: ''
   token:
     description: 'GitHub Token for Authentication to Github API (mainly for limit avoidance)'
     required: false

@@ -44,6 +44,13 @@ function parse_inputs {
       fi
     fi
 
+    enable_helm=""
+    helm_version=""
+    if [ -n "${INPUT_HELM_VERSION}" ]; then
+      enable_helm="--enable-helm"
+      helm_version=${INPUT_HELM_VERSION}
+    fi
+
     with_token=()
     if [ "${INPUT_TOKEN}" != "" ]; then
        with_token=(-H "Authorization: token ${INPUT_TOKEN}")
@@ -90,18 +97,37 @@ function install_kustomize {
 
 }
 
+function install_helm {
+    url="https://get.helm.sh/helm-v${helm_version}-linux-amd64.tar.gz"
+
+
+    echo "Downloading helm v${helm_version}"
+    curl --retry 30 --retry-max-time 120 -s -S -L ${url} | tar -xzv -C /usr/bin --strip-components=1 --wildcards 'linux-*/helm'
+    if [ "${?}" -ne 0 ]; then
+        echo "Failed to download helm v${helm_version}."
+        exit 1
+    fi
+    echo "Successfully downloaded helm v${helm_version}."
+
+    echo "Allowing execute privilege to helm."
+    chmod +x /usr/bin/helm
+    if [ "${?}" -ne 0 ]; then
+        echo "Failed to update helm privilege."
+        exit 1
+    fi
+    echo "Successfully added execute privilege to helm."
+}
+
 function main {
 
     scriptDir=$(dirname ${0})
     source ${scriptDir}/kustomize_build.sh
     parse_inputs
 
-    if  [ "${kustomize_install}" == "1" ]; then
-      install_kustomize
-    fi
+    [ "${kustomize_install}" == "1" ] && install_kustomize
+    [ -n "${helm_version}" ] && install_helm
 
     kustomize_build
-
 }
 
 main "${*}"

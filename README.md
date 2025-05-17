@@ -47,6 +47,7 @@ Inputs configure Kustomize GitHub Actions to perform build action.
 * `kustomize_output_file` - (Optional) Path to to file to write the kustomize build output to.
 * `kustomize_build_options` - (Optional) Provide build options to kustomize build.
 * `enable_alpha_plugins` - (Optional) Enable Kustomize plugins. Defaults to `false`.
+* `helm_version` - (Optional) The helm version to install and use for `kustomize build --enable-helm`
 
 ## Outputs
 

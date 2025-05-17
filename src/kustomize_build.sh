@@ -4,7 +4,7 @@ function kustomize_build {
     # gather output
     echo "build: info: kustomize build in directory ${kustomize_build_dir}."
 
-    build_output=$(kustomize build ${enable_alpha_plugins} ${kustomize_build_options} ${kustomize_build_dir} 2>&1)
+    build_output=$(kustomize build ${enable_alpha_plugins} ${enable_helm} ${kustomize_build_options} ${kustomize_build_dir} 2>&1)
 
     build_exit_code=${?}
 
